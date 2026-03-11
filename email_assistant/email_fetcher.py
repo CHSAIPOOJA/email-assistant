@@ -84,22 +84,27 @@ def fetch_unread_emails(account_id='default', max_results=50):
         print("  4. Delete token_default.json and re-authenticate")
         raise Exception(f"Gmail API Error: {e}")
 
-def mark_as_read(service, message_id):
+def get_unread_count(account_id='default'):
     """
-    Marks a specific email as read.
+    Gets the current unread email count from Gmail.
 
     Args:
-        service: Gmail API service object
-        message_id (str): ID of the message to mark as read
+        account_id (str): Account identifier
+
+    Returns:
+        int: Number of unread emails
     """
     try:
-        service.users().messages().modify(
+        service = authenticate_gmail(account_id)
+        results = service.users().messages().list(
             userId='me',
-            id=message_id,
-            body={'removeLabelIds': ['UNREAD']}
+            q='is:unread',
+            maxResults=1
         ).execute()
+        return results.get('resultSizeEstimate', 0)
     except Exception as e:
-        print(f"Error marking email as read: {e}")
+        print(f"Error getting unread count: {e}")
+        return 0
 
 def get_email_body(payload):
     """

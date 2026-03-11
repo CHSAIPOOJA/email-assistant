@@ -22,6 +22,8 @@ Google blocks unverified applications from accessing certain sensitive scopes. Y
 
 3. **Re-authenticate**:
    - Delete any `token_*.json` files in your project root (if they exist) to force re‑auth
+   - Make sure the Gmail address you plan to use is added as a **test user** on the
+     OAuth consent screen, or publish the app if you need public access.
 
    - Click "Process New Emails" on the dashboard
    - Follow the OAuth flow again

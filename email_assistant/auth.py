@@ -70,8 +70,16 @@ def authenticate_gmail(account_id='default'):
             # This will open a browser for user authentication
             print(f"[DEBUG] Starting new OAuth flow - browser should open for authentication")
             flow = InstalledAppFlow.from_client_secrets_file('credentials.json', SCOPES)
-            creds = flow.run_local_server(port=0)
-            print(f"[DEBUG] OAuth flow completed successfully")
+            try:
+                creds = flow.run_local_server(port=0)
+                print(f"[DEBUG] OAuth flow completed successfully")
+            except Exception as e:
+                # common error when the OAuth consent screen is not verified
+                print(f"[ERROR] OAuth flow failed: {e}")
+                print("   ⚠️  Often this means the Google OAuth consent screen is still in 'Testing' and the current user is not listed as a test user.")
+                print("   • Go to Google Cloud Console > APIs & Services > OAuth consent screen")
+                print("   • Add the email address you're trying to authenticate under 'Test users' or publish the app after verification.")
+                raise
 
         # Save the credentials to token file for future use
         with open(token_file, 'w') as token:

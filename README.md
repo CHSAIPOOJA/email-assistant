@@ -45,10 +45,22 @@ is created for each user, so multiple users can use the system on the same machi
 
 The `credentials.json` file is the OAuth client configuration and is **not tied** to a
 specific Gmail address. It can be reused for all users as long as the Gmail API is
-enabled and the OAuth consent screen allows other users.
+enabled.
+
+💡 **Important:** Google restricts OAuth clients that are still in testing mode. If
+you encounter a browser page saying *"Access blocked: [app] has not completed the
+Google verification process"* when a user other than the project owner attempts to
+log in, it means their email address is not added as a **test user** on the OAuth
+consent screen. To allow additional Gmail accounts:
+
+1. Go to Google Cloud Console → APIs & Services → OAuth consent screen.
+2. Under **Test users**, add any email addresses that should be permitted.
+3. Alternatively, submit the app for verification and publish it, which removes
+   the testing restriction (requires a privacy policy and compliance checks).
 
 If you previously authenticated with one account and want to switch, delete the
 corresponding token file or let the new user authenticate when they log in.
+
 
 4. Initialize Database
 ```bash

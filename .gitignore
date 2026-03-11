@@ -1,8 +1,16 @@
 credentials.json
-token_*.json  # ignore all account-specific token files
-
+token_*.json
 email_assistant.db
 .env
 __pycache__/
 *.pyc
 .venv/
+
+# credentials.json
+# token_*.json  # ignore all account-specific token files
+
+# email_assistant.db
+# .env
+# __pycache__/
+# *.pyc
+# .venv/
