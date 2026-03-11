@@ -1,0 +1,12 @@
+# requirements.txt
+# List of Python packages required for the Email Assistant project
+
+google-api-python-client==2.90.0
+google-auth-httplib2==0.1.1
+google-auth-oauthlib==1.2.0
+flask==2.3.3
+transformers>=4.30.2
+torch>=2.0.0
+apscheduler==3.10.4
+flask-login==0.6.3
+beautifulsoup4

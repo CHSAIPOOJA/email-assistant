@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Assistant Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="/">Email Assistant</a>
+            <div class="navbar-nav ms-auto">
+                {% if is_test_mode %}
+                    <span class="badge bg-warning me-3" style="margin-top: 10px;">TEST MODE (Demo Data)</span>
+                {% else %}
+                    <span class="badge bg-success me-3" style="margin-top: 10px;">GMAIL CONNECTED</span>
+                {% endif %}
+                <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{% if 'Error' in message or '❌' in message %}danger{% else %}success{% endif %} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        
+        <div class="row">
+            <div class="col-md-8">
+                <h2>Email Inbox</h2>
+
+                <!-- Search and Filter -->
+                <div class="mb-3">
+                    <form method="GET" class="row g-3">
+                        <div class="col-md-4">
+                            <select name="category" class="form-select">
+                                <option value="all" {% if current_category == 'all' %}selected{% endif %}>All Categories</option>
+                                <option value="college" {% if current_category == 'college' %}selected{% endif %}>College</option>
+                                <option value="placement" {% if current_category == 'placement' %}selected{% endif %}>Placement</option>
+                                <option value="personal" {% if current_category == 'personal' %}selected{% endif %}>Personal</option>
+                                <option value="important" {% if current_category == 'important' %}selected{% endif %}>Important</option>
+                                <option value="promotions" {% if current_category == 'promotions' %}selected{% endif %}>Promotions</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <input type="text" name="search" class="form-control" placeholder="Search emails..." value="{{ search }}">
+                        </div>
+                        <div class="col-md-2">
+                            <button type="submit" class="btn btn-primary">Filter</button>
+                        </div>
+                    </form>
+                    <form method="POST" action="{{ url_for('process_emails') }}" class="mt-2">
+                        <button type="submit" class="btn btn-success">Process New Emails</button>
+                    </form>
+                </div>
+
+                <!-- Emails Table -->
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Sender</th>
+                                <th>Subject</th>
+                                <th>Category</th>
+                                <th>Priority</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for email in emails %}
+                            <tr>
+                                <td>{{ email.sender }}</td>
+                                <td>{{ email.subject }}</td>
+                                <td>
+                                    <span class="badge bg-{{ 'primary' if email.category == 'college' else 'success' if email.category == 'placement' else 'info' if email.category == 'personal' else 'warning' if email.category == 'important' else 'secondary' }}">
+                                        {{ email.category }}
+                                    </span>
+                                </td>
+                                <td>
+                                    {% if email.priority %}
+                                        <span class="badge bg-danger">Priority</span>
+                                    {% endif %}
+                                </td>
+                                <td>{{ email.timestamp }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <!-- Analytics -->
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <h5>Analytics</h5>
+                    </div>
+                    <div class="card-body">
+                        <p>Total Emails: <strong>{{ analytics.total_emails }}</strong></p>
+                        <p>Priority Emails: <strong>{{ analytics.priority_count }}</strong></p>
+                        <h6>By Category:</h6>
+                        <ul class="list-unstyled">
+                            {% for category, count in analytics.category_counts.items() %}
+                            <li>{{ category }}: {{ count }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Daily Summary -->
+                {% if summary %}
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Today's Summary</h5>
+                    </div>
+                    <div class="card-body">
+                        <pre style="white-space: pre-wrap; font-size: 0.9em;">{{ summary.summary_text }}</pre>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

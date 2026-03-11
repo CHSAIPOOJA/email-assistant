@@ -1,0 +1,7 @@
+credentials.json
+token_default.json
+email_assistant.db
+.env
+__pycache__/
+*.pyc
+.venv/
