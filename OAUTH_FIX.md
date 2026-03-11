@@ -21,7 +21,8 @@ Google blocks unverified applications from accessing certain sensitive scopes. Y
    - Click "Add"
 
 3. **Re-authenticate**:
-   - Delete the file `token_default.json` in your project root (if it exists)
+   - Delete any `token_*.json` files in your project root (if they exist) to force re‑auth
+
    - Click "Process New Emails" on the dashboard
    - Follow the OAuth flow again
 
@@ -69,7 +70,8 @@ When you're ready to use real Gmail:
 
 1. Set `TEST_MODE = False` in `config.py`
 2. Follow "Option 1" above (add as test user)
-3. Delete `token_default.json` if it exists
+3. Delete any `token_*.json` files if they exist
+
 4. Click "Process New Emails"
 
 ## Troubleshooting
@@ -84,5 +86,5 @@ When you're ready to use real Gmail:
 ## File Locations
 
 - **Config File**: `email_assistant/config.py`
-- **Token File**: `token_default.json` (in project root)
+- **Token File**: `token_<account>.json` (in project root; identified by the user email)
 - **Credentials**: `credentials.json` (in project root)

@@ -34,6 +34,27 @@ pip install -r requirements.txt
 # Note: spaCy model download may fail on Python 3.14+, but keyword-based categorization will still work
 ```
 
+### 3. Multi‑user setup
+Each user of the web dashboard logs in with their own account (the registration form
+asks for an email address). The app uses that email as the **account ID** when
+communicating with Gmail.
+
+When a user clicks “Process New Emails” they will be prompted to grant access to
+their personal Gmail inbox via OAuth. A separate token file (`token_<sanitized_email>.json`)
+is created for each user, so multiple users can use the system on the same machine.
+
+The `credentials.json` file is the OAuth client configuration and is **not tied** to a
+specific Gmail address. It can be reused for all users as long as the Gmail API is
+enabled and the OAuth consent screen allows other users.
+
+If you previously authenticated with one account and want to switch, delete the
+corresponding token file or let the new user authenticate when they log in.
+
+4. Initialize Database
+```bash
+python -c "from email_assistant.database import init_db; init_db()"
+```
+
 ### 3. Initialize Database
 ```bash
 python -c "from email_assistant.database import init_db; init_db()"

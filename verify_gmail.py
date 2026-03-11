@@ -11,8 +11,12 @@ sys.path.insert(0, os.path.dirname(__file__))
 from email_assistant.auth import authenticate_gmail
 from email_assistant.config import TEST_MODE
 
-def verify_gmail_connection():
-    """Verify that Gmail is properly authenticated."""
+def verify_gmail_connection(account_id='default'):
+    """Verify that Gmail is properly authenticated for a given account ID.
+
+    Args:
+        account_id (str): Identifier used when processing emails (usually user email)
+    """
     
     print("=" * 60)
     print("GMAIL CONNECTION VERIFICATION")
@@ -27,10 +31,11 @@ def verify_gmail_connection():
     else:
         print("   ✅ TEST_MODE is OFF - Ready for real Gmail")
     
-    # Check token file
-    token_file = 'token_default.json'
+    # Determine token filename for this account
+    safe_id = ''.join(c if c.isalnum() else '_' for c in account_id)
+    token_file = f'token_{safe_id}.json'
     if os.path.exists(token_file):
-        print(f"\n2. Authentication Token: ✅ FOUND")
+        print(f"\n2. Authentication Token ({token_file}): ✅ FOUND")
         print(f"   Location: {os.path.abspath(token_file)}")
         print("   Status: Gmail is authenticated!")
     else:

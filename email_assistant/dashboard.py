@@ -56,23 +56,24 @@ def create_app():
         """Main dashboard showing emails and analytics."""
         category = request.args.get('category', 'all')
         search = request.args.get('search', '')
+        account_id = current_user.email  # use logged-in user's email as account identifier
 
-        # Get emails
+        # Get emails for this account
         if category == 'all':
-            emails = get_emails_by_category()
+            emails = get_emails_by_category(account_id=account_id)
         else:
-            emails = get_emails_by_category(category)
+            emails = get_emails_by_category(category, account_id=account_id)
 
         # Filter by search
         if search:
             emails = [e for e in emails if search.lower() in e['subject'].lower() or search.lower() in e['sender'].lower()]
 
-        # Get analytics
-        analytics = get_email_analytics()
+        # Get analytics for this account
+        analytics = get_email_analytics(account_id=account_id)
 
         # Get today's summary
         today = datetime.now().strftime('%Y-%m-%d')
-        summary = get_daily_summary(today)
+        summary = get_daily_summary(today, account_id=account_id)
 
         return render_template('dashboard.html',
                              emails=emails,
@@ -180,8 +181,10 @@ def create_app():
     def process_emails():
         """Process unread emails."""
         from email_assistant.processor import process_emails
+        # process emails for the logged-in user
+        account_id = current_user.email
         try:
-            count = process_emails()
+            count = process_emails(account_id=account_id)
             if count == 0:
                 flash('⚠️ No unread emails found. Check your Gmail inbox or verify authentication.', 'warning')
             else:

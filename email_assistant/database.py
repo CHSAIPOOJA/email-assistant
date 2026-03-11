@@ -119,11 +119,11 @@ def clear_emails(account_id='default'):
 
 def get_emails_by_category(category=None, account_id='default'):
     """
-    Retrieves emails from database, optionally filtered by category.
+    Retrieves emails from database, optionally filtered by category and account.
 
     Args:
         category (str): Email category to filter by
-        account_id (str): Account identifier
+        account_id (str): Account identifier (typically user email)
 
     Returns:
         list: List of email dictionaries
@@ -151,11 +151,11 @@ def get_emails_by_category(category=None, account_id='default'):
 
 def get_daily_summary(date, account_id='default'):
     """
-    Retrieves daily summary for a specific date.
+    Retrieves daily summary for a specific date and account.
 
     Args:
         date (str): Date in YYYY-MM-DD format
-        account_id (str): Account identifier
+        account_id (str): Account identifier (user email)
 
     Returns:
         dict: Daily summary data or None
@@ -196,7 +196,7 @@ def save_daily_summary(date, summary_text, email_count, account_id='default'):
 
 def get_email_analytics(account_id='default'):
     """
-    Retrieves basic analytics data.
+    Retrieves basic analytics data for a given account.
 
     Args:
         account_id (str): Account identifier

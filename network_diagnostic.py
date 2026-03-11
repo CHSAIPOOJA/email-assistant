@@ -44,19 +44,24 @@ except Exception as e:
 
 # Test 3: Check if token needs refresh
 print("\n3. Checking authentication token...")
-if os.path.exists('token_default.json'):
-    print("   ✅ token_default.json exists")
+# look for any token file pattern
+existing_tokens = [f for f in os.listdir('.') if f.startswith('token_') and f.endswith('.json')]
+if existing_tokens:
+    print(f"   ✅ Found token files: {existing_tokens}")
+    # for diagnostics we can check any one file
+    token_path = existing_tokens[0]
+    print(f"   Using token file for diagnostics: {token_path}")
     try:
         import json
-        with open('token_default.json', 'r') as f:
-            token = json.load(f)
-        if 'expiry' in token:
-            print(f"   Token expiry: {token['expiry']}")
+        with open(token_path, 'r') as f:
+            tok = json.load(f)
+        print(f"   Token expiry: {tok.get('expiry', 'unknown')}")
         print("   ⚠️  Token might be expired - may need refresh")
-    except:
-        print("   ❌ Token file is corrupted")
+    except Exception as e:
+        print(f"   ❌ Error reading token: {e}")
 else:
-    print("   ⚠️  No token found - will need to re-authenticate")
+    print("   ⚠️  No token files found - Gmail not authenticated yet")
+    # nothing else to check
 
 # Test 4: Check for proxy settings
 print("\n4. Checking Windows proxy settings...")

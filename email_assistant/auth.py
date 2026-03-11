@@ -41,7 +41,10 @@ def authenticate_gmail(account_id='default'):
     5. Build and return Gmail API service
     """
     creds = None
-    token_file = f'token_{account_id}.json'
+    # sanitize account_id for filename (emails contain @ which is invalid in some
+    # filesystems). replace non-alphanumeric with underscores.
+    safe_id = ''.join(c if c.isalnum() else '_' for c in account_id)
+    token_file = f'token_{safe_id}.json'
 
     # Check if credentials.json exists
     if not os.path.exists('credentials.json'):

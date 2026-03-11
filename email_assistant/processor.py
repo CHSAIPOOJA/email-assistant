@@ -14,6 +14,7 @@ from email_assistant.database import save_email, clear_emails
 from email_assistant.auth import authenticate_gmail
 
 def process_emails(account_id='default', max_emails=50):
+    # account_id should uniquely identify a user (email is fine)
     """
     Processes emails through the entire pipeline.
 

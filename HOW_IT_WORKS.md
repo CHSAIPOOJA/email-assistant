@@ -101,7 +101,8 @@ When you click "Process New Emails" with real Gmail:
    ```
 
 2. **Delete old tokens**:
-   - Delete `token_default.json` from project root (if exists)
+   - Delete any `token_*.json` files from project root (if exists) to force re‑authentication
+
    - This forces re-authentication
 
 3. **Place credentials**:
@@ -193,7 +194,7 @@ Everything is stored **on your computer only**:
 | File/Folder | Purpose |
 |-------------|---------|
 | `email_assistant.db` | SQLite database with all emails |
-| `token_default.json` | Gmail API access token (encrypted) |
+| `token_<account>.json` | Gmail API access token (encrypted, one per user) |
 | `credentials.json` | Your OAuth credentials |
 | Dashboard cache | Temporary browser cache |
 
